@@ -18,42 +18,62 @@ struct ContentView: View {
     @State private var showResults = false// показать результат
     
     var body: some View {
-        VStack {
-            Spacer()// отступ
-            
-            Text ("Computer has played...") // Текст
-                .fontDesign(.serif)
-                .bold()
-                .font(.system(size: 25))
-            
-            Text (moves[computerChoice]) //массив с рандомным значением
-                .font(.system(size: 100))
-            
-            if shouldWin { // если переменна тру то вопрос что нужно выбрать для победы,
-                Text("Which one wins?")
-                    .foregroundStyle(.green)
-                    .font(.title)
-            } else {
-                Text("Which one loses?")// если фолс для поражения
+        ZStack{
+            LinearGradient(colors: [.cyan, .indigo], startPoint: .top, endPoint: .bottom)
+            VStack {
+                Spacer()// отступ
+                
+                Text ("Computer has played...") // Текст
+                    .fontDesign(.serif)
+                    .bold()
+                    .font(.system(size: 25))
+                
+                Text (moves[computerChoice]) //массив с рандомным значением
+                    .font(.system(size: 100))
+                
+    //            if shouldWin { // если переменна тру то вопрос что нужно выбрать для победы,
+    //                Text("Which one wins?")
+    //                    .foregroundStyle(.green)
+    //                    .font(.title)
+    //            } else {
+    //                Text("Which one loses?")// если фолс для поражения
+    //                    .foregroundStyle(.red)
+    //                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+    //            }
+                
+                Spacer()
+                
+                Text(shouldWin ? "Which one wins?" : "Which one loses?") //тернарный оператор
                     .foregroundStyle(.red)
                     .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-            }
-            
-            HStack { // горизонтальная вьюшка
-                ForEach(0..<3) {number in //выводим три кнопки в качестве которых все картинки
-                    Button(moves[number]){ //на кнопку вешаем функцию play которая принимает выбранный индекс кнопки
-                        play(choice: number)
+                    .frame(maxWidth: 300)
+                                    .padding(.vertical, 20)
+                                    .background(.regularMaterial)
+                                    .clipShape(.rect(cornerRadius: 30))
+                                    .fontDesign(.serif)
+                
+                Spacer()
+                
+                HStack { // горизонтальная вьюшка
+                    ForEach(0..<3) {number in //выводим три кнопки в качестве которых все картинки
+                        Button(moves[number]){ //на кнопку вешаем функцию play которая принимает выбранный индекс кнопки
+                            play(choice: number)
+                        }
+                        .font(.system(size: 80))
                     }
-                    .font(.system(size: 80))
                 }
+                
+                Spacer()
+                
+                Text("Score: \(score)") //счет
+                    .font(.subheadline)
+                    .bold()
+                    .fontDesign(.serif)
+                
+                Spacer()
             }
-            Spacer()
-            
-            Text("Sccore: \(score)") //счет
-                .font(.subheadline)
-            
-            Spacer()
         }
+        .ignoresSafeArea()
         .alert("Game over", isPresented: $showResults) {//предупреждение которое появляется когда showResult тру
             Button("Play Again", action: reset)//в алерте кнопка новой игры которая запускает функцию reset
         } message: {
